@@ -1,0 +1,14 @@
+extends base
+
+block content 
+    span=errorMessage
+    form(method="POST")
+        input(type="text", required, name="username", placeholder="Username")
+        input(type="text", required ,name="password", placeholder="Password")
+        input(type="submit", name="Join")
+        br
+        a(href="users/github/start") Continue with Github &rarr;
+    hr
+    div
+        span Don't have an account? &nbsp;
+        a(href="/join") Create one now &rarr;
