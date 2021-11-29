@@ -2,7 +2,9 @@ import Video from "../models/Video";
 import User from "../models/User";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({});
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -54,14 +56,15 @@ export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
   const { path: videoUrl } = req.file;
   try {
-    const video = await Video.create({
+    let video = await Video.create({
       title,
       videoUrl,
       description,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
-    const user = await User.findById(_id);
+    video = await video.populate("owner");
+    const user = video.owner;
     user.videos.push(video._id);
     user.save();
     req.session.user = user;
@@ -98,7 +101,7 @@ export const search = async (req, res) => {
   if (keyword) {
     videos = await Video.find({
       title: keyword,
-    });
+    }).populate("owner");
   }
 
   res.render("search", { pageTitle: "Search", videos });
