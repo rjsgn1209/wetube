@@ -1,7 +1,7 @@
 extends base
 
 block content
-    div#videoContainer
+    div#videoContainer(data-id=video._id)
         video(src="/" + video.videoUrl)
         span.videoContainer__btn
             i.fas.fa-play.fa-3x#playIcon
